@@ -25,6 +25,7 @@ button.addEventListener("click", async () => {
     }
 
     const data = await res.json();
+    console.log(data);
 
     const name = data.location.name;
     const country = data.location.country;
@@ -44,5 +45,11 @@ button.addEventListener("click", async () => {
     `;
   } catch (error) {
     weatherResult.innerHTML = `<p class='text-red-600'>${error.message}</p>`;
+  }
+});
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    button.click();
   }
 });
