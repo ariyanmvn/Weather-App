@@ -4,52 +4,64 @@ const weatherResult = document.getElementById("weatherResult");
 
 const API_KEY = `76bc2e0fabeb484080b43913251906`;
 
-button.addEventListener("click", async () => {
+// Update the city param in URL as you type
+input.addEventListener("input", () => {
   const city = input.value.trim();
+  const url = new URL(window.location);
+  if (city) {
+    url.searchParams.set("city", city);
+  } else {
+    url.searchParams.delete("city");
+  }
+  window.history.replaceState(null, "", url.toString());
+});
 
+// Search weather on button click or Enter key press
+async function search() {
+  const city = input.value.trim();
   if (!city) {
     weatherResult.innerHTML =
       "<p class='text-red-600'>Please enter a city name.</p>";
     return;
   }
-
   weatherResult.innerHTML = "<p>Loading...</p>";
-
   try {
     const res = await fetch(
       `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&aqi=yes`
     );
-
-    if (!res.ok) {
-      throw new Error("City not found");
-    }
-
+    if (!res.ok) throw new Error("City not found");
     const data = await res.json();
-    console.log(data);
 
-    const name = data.location.name;
-    const country = data.location.country;
-    const temp = data.current.temp_c;
-    const humidity = data.current.humidity;
-    const wind = data.current.wind_kph;
-    const description = data.current.condition.text;
-    const icon = data.current.condition.icon;
+    let icon = data.current.condition.icon;
+    if (icon.startsWith("http:")) icon = icon.replace("http:", "https:");
 
     weatherResult.innerHTML = `
-      <h2 class="text-xl font-bold">${name}, ${country}</h2>
-      <img src="https:${icon}" alt="${description}" class="mx-auto" />
-      <p class="text-lg">🌡️ Temperature: ${temp}°C</p>
-      <p>💧 Humidity: ${humidity}%</p>
-      <p>🌬️ Wind: ${wind} kph</p>
-      <p class="capitalize">🌤️ ${description}</p>
+      <h2 class="text-xl font-bold">${data.location.name}, ${data.location.country}</h2>
+      <img src="${icon}" alt="${data.current.condition.text}" class="mx-auto" />
+      <p class="text-lg">🌡️ Temperature: ${data.current.temp_c}°C</p>
+      <p>💧 Humidity: ${data.current.humidity}%</p>
+      <p>🌬️ Wind: ${data.current.wind_kph} kph</p>
+      <p class="capitalize">🌤️ ${data.current.condition.text}</p>
     `;
-  } catch (error) {
-    weatherResult.innerHTML = `<p class='text-red-600'>${error.message}</p>`;
+  } catch (err) {
+    weatherResult.innerHTML = `<p class='text-red-600'>${err.message}</p>`;
   }
-});
+}
+
+button.addEventListener("click", search);
 
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
-    button.click();
+    search();
+  }
+});
+
+// On page load, if city param exists, fill input and fetch
+window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const city = params.get("city");
+  if (city) {
+    input.value = city;
+    search();
   }
 });
