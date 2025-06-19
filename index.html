@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather app</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+    <main class="flex justify-center items-center flex-col">
+      <!-- welcome message -->
+      <h1 class="text-3xl text-center font-semibold my-7">
+        Welcome to the Weather App!
+      </h1>
+
+      <!-- main container  -->
+      <div
+        class="w-[400px] h-[400px] bg-blue-200 rounded-xl flex flex-col items-center"
+      >
+        <!-- search div  -->
+        <div class="my-5">
+          <input
+            class="bg-white rounded-xl px-5 py-2"
+            placeholder="Search your location"
+            type="text"
+            id="searchInput"
+          />
+          <button
+            id="searchButton"
+            class="cursor-pointer font-semibold rounded-xl bg-blue-500 px-5 py-2"
+          >
+            🔍Search
+          </button>
+        </div>
+        <!-- weather result -->
+        <div id="weatherResult" class="text-center space-y-2"></div>
+      </div>
+    </main>
+    <script src="scripe.js"></script>
+  </body>
+</html>
