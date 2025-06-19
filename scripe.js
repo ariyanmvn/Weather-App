@@ -4,7 +4,6 @@ const weatherResult = document.getElementById("weatherResult");
 
 const API_KEY = `76bc2e0fabeb484080b43913251906`;
 
-// Update the city param in URL as you type
 input.addEventListener("input", () => {
   const city = input.value.trim();
   const url = new URL(window.location);
@@ -16,7 +15,6 @@ input.addEventListener("input", () => {
   window.history.replaceState(null, "", url.toString());
 });
 
-// Search weather on button click or Enter key press
 async function search() {
   const city = input.value.trim();
   if (!city) {
@@ -56,7 +54,6 @@ input.addEventListener("keydown", (e) => {
   }
 });
 
-// On page load, if city param exists, fill input and fetch
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const city = params.get("city");
