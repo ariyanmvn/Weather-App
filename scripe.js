@@ -4,6 +4,8 @@ const weatherResult = document.getElementById("weatherResult");
 
 const API_KEY = `76bc2e0fabeb484080b43913251906`;
 
+
+//optional 
 input.addEventListener("input", () => {
   const city = input.value.trim();
   const url = new URL(window.location);
@@ -18,8 +20,7 @@ input.addEventListener("input", () => {
 async function search() {
   const city = input.value.trim();
   if (!city) {
-    weatherResult.innerHTML =
-      "<p class='text-red-600'>Please enter a city name.</p>";
+    weatherResult.innerHTML = "<p class='error'>Please enter a city name.</p>";
     return;
   }
   weatherResult.innerHTML = "<p>Loading...</p>";
@@ -34,26 +35,32 @@ async function search() {
     if (icon.startsWith("http:")) icon = icon.replace("http:", "https:");
 
     weatherResult.innerHTML = `
-      <h2 class="text-xl font-bold">${data.location.name}, ${data.location.country}</h2>
-      <img src="${icon}" alt="${data.current.condition.text}" class="mx-auto" />
-      <p class="text-lg">🌡️ Temperature: ${data.current.temp_c}°C</p>
-      <p>💧 Humidity: ${data.current.humidity}%</p>
-      <p>🌬️ Wind: ${data.current.wind_kph} kph</p>
-      <p class="capitalize">🌤️ ${data.current.condition.text}</p>
-    `;
+          <h2>${data.location.name}, ${data.location.country}</h2>
+          <img src="${icon}" alt="${data.current.condition.text}" class="weather-icon" />
+          <p>🌡️ Temperature: ${data.current.temp_c}°C</p>
+          <p>💧 Humidity: ${data.current.humidity}%</p>
+          <p>🌬️ Wind: ${data.current.wind_kph} kph</p>
+          <p class="capitalize">🌤️ ${data.current.condition.text}</p>
+        `;
   } catch (err) {
-    weatherResult.innerHTML = `<p class='text-red-600'>${err.message}</p>`;
+    weatherResult.innerHTML = `<p class='error'>${err.message}</p>`;
   }
 }
 
 button.addEventListener("click", search);
 
+
+
+// optional
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     search();
   }
 });
 
+
+
+//optional
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const city = params.get("city");
